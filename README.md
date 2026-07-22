@@ -1,7 +1,4 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/your-org/your-repo/main/public/banner-dark.svg">
-  <img alt="Xai — Intelligence Workspace" src="https://raw.githubusercontent.com/your-org/your-repo/main/public/banner-light.svg">
-</picture>
+<img alt="Xai Intelligence Workspace" src="public/banner.svg" width="1200">
 
 <p align="center">
   <strong>From raw data → structured intelligence → actionable insight → automation.</strong>
@@ -62,7 +59,7 @@ Framework     Next.js 15 (App Router)
 Animation     Framer Motion + GSAP + ScrollTrigger
 3D            Three.js + React Three Fiber + Drei
 Styling       Tailwind CSS (custom design tokens)
-Fonts         Geist (UI) + JetBrains Mono (code, labels)
+Fonts         Inter (UI) + JetBrains Mono (code, labels)
 Icons         Lucide React
 ```
 
@@ -162,18 +159,6 @@ lib/
 - Visible focus states on all interactive elements
 - `aria-hidden="true"` on decorative SVG lattice
 - Colour contrast passes WCAG AA (minimum 4.5:1)
-
----
-
-## Deliverables
-
-| Deliverable | Status |
-|-------------|--------|
-| Product documentation | ✅ `docs/` directory — 5 guides |
-| Figma design file | 🔲 *(to be added)* |
-| GitHub repository | ✅ This repository |
-| Live deployment | 🔲 *(to be added)* |
-| Video walkthrough | 🔲 *(to be added)* |
 
 ---
 

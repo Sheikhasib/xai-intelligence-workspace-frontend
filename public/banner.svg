@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="200" viewBox="0 0 1200 200">
+  <rect width="1200" height="200" fill="#0D1117"/>
+  <line x1="0" y1="0" x2="0" y2="200" stroke="#1C2129" stroke-width="1"/>
+  <line x1="48" y1="0" x2="48" y2="200" stroke="#1C2129" stroke-width="1"/>
+  <line x1="96" y1="0" x2="96" y2="200" stroke="#1C2129" stroke-width="1"/>
+  <line x1="0" y1="0" x2="1200" y2="0" stroke="#1C2129" stroke-width="1"/>
+  <line x1="0" y1="48" x2="1200" y2="48" stroke="#1C2129" stroke-width="1"/>
+  <line x1="0" y1="96" x2="1200" y2="96" stroke="#1C2129" stroke-width="1"/>
+  <line x1="0" y1="144" x2="1200" y2="144" stroke="#1C2129" stroke-width="1"/>
+  <line x1="0" y1="192" x2="1200" y2="192" stroke="#1C2129" stroke-width="1"/>
+  <circle cx="48" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="96" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="144" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="192" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="240" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="288" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="336" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="384" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="432" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="480" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="528" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="576" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="624" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="672" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="720" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="768" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="816" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="864" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="912" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="960" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="1008" cy="48" r="1.5" fill="#21262D"/>
+  <circle cx="1056" cy="96" r="1.5" fill="#21262D"/>
+  <circle cx="1104" cy="144" r="1.5" fill="#21262D"/>
+  <circle cx="1152" cy="48" r="1.5" fill="#21262D"/>
+  <text x="600" y="82" font-family="system-ui, sans-serif" font-size="40" font-weight="600" fill="#E6E8EB" text-anchor="middle" letter-spacing="-0.02">Xai</text>
+  <text x="600" y="120" font-family="system-ui, sans-serif" font-size="16" fill="#8B949E" text-anchor="middle" letter-spacing="0.08" text-transform="uppercase">INTELLIGENCE WORKSPACE</text>
+  <line x1="540" y1="138" x2="660" y2="138" stroke="#FFB454" stroke-width="1" opacity="0.6"/>
+  <circle cx="600" cy="96" r="40" fill="none" stroke="#FFB454" stroke-width="0.5" opacity="0.15"/>
+</svg>
