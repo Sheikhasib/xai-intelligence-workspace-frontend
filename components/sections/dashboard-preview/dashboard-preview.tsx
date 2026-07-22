@@ -5,11 +5,12 @@ import { useScrollProgress } from '@/lib/animation/useScrollProgress'
 import { GridBackground } from '@/components/ui/grid-background'
 import { Sidebar } from './sidebar'
 import { Panel, TabbedPanel } from './panel'
+import type { TabData } from './types'
 
-const tabs = [
-  { id: 'overview', label: 'Overview', type: 'chart' as const },
-  { id: 'clusters', label: 'Clusters', type: 'table' as const },
-  { id: 'metrics', label: 'Metrics', type: 'stats-group' as const, data: [
+const tabs: TabData[] = [
+  { id: 'overview', label: 'Overview', type: 'chart' },
+  { id: 'clusters', label: 'Clusters', type: 'table' },
+  { id: 'metrics', label: 'Metrics', type: 'stats-group', data: [
     { label: 'Accuracy', value: 97, suffix: '%' },
     { label: 'Latency', value: 12, suffix: 'ms' },
     { label: 'Sources', value: 48, suffix: '' },

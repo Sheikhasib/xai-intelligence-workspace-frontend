@@ -70,14 +70,13 @@ function Particles({ progress }: { progress: number }) {
     const posAttr = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute
 
     if (reduced) {
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        const idx = i * 3
-        currentPositions[idx] = gridPositions[idx]
-        currentPositions[idx + 1] = gridPositions[idx + 1]
-        currentPositions[idx + 2] = gridPositions[idx + 2]
-      }
-      posAttr.array = currentPositions
-      posAttr.needsUpdate = true
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const idx = i * 3
+      currentPositions[idx] = gridPositions[idx]
+      currentPositions[idx + 1] = gridPositions[idx + 1]
+      currentPositions[idx + 2] = gridPositions[idx + 2]
+    }
+    posAttr.needsUpdate = true
       return
     }
 

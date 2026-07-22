@@ -1,7 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 
 interface AnimatedStatProps {
   value: number
@@ -10,9 +10,12 @@ interface AnimatedStatProps {
 }
 
 export function AnimatedStat({ value, label, suffix = '' }: AnimatedStatProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true })
   const [count, setCount] = useState(0)
 
   useEffect(() => {
+    if (!inView) return
     let start = 0
     const duration = 800
     const step = 16
@@ -27,10 +30,11 @@ export function AnimatedStat({ value, label, suffix = '' }: AnimatedStatProps) {
       }
     }, step)
     return () => clearInterval(timer)
-  }, [value])
+  }, [value, inView])
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}

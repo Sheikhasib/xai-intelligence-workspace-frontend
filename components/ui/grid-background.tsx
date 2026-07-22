@@ -1,17 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
 import { GRID_UNIT, colors } from '@/lib/constants'
 
+const STRUCTURE_EASING = 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+
 interface GridBackgroundProps {
-  /**
-   * 0 = raw/scattered (hero), 1 = fully structured (dashboard).
-   * Drives both opacity/jitter of the grid lines and node highlight density —
-   * this is the single prop every section uses to say "how organized is
-   * the data right now," so the transformation reads as one continuous
-   * system rather than four separate animations.
-   */
   structure?: number
   className?: string
 }
@@ -20,17 +14,15 @@ export function GridBackground({ structure = 0, className = '' }: GridBackground
   const nodes = useMemo(() => {
     const cols = 24
     const rows = 16
-    const list: { x: number; y: number; jitterX: number; jitterY: number; id: string }[] = []
+    const list: { sx: number; sy: number; jx: number; jy: number }[] = []
     for (let x = 0; x <= cols; x++) {
       for (let y = 0; y <= rows; y++) {
-        // deterministic pseudo-random jitter so raw state looks organic, not random each render
         const seed = (x * 31 + y * 17) % 97
         list.push({
-          x: x * GRID_UNIT,
-          y: y * GRID_UNIT,
-          jitterX: ((seed % 13) - 6),
-          jitterY: (((seed * 7) % 13) - 6),
-          id: `${x}-${y}`,
+          sx: x * GRID_UNIT,
+          sy: y * GRID_UNIT,
+          jx: (seed % 13) - 6,
+          jy: ((seed * 7) % 13) - 6,
         })
       }
     }
@@ -38,6 +30,9 @@ export function GridBackground({ structure = 0, className = '' }: GridBackground
   }, [])
 
   const gridOpacity = 0.08 + structure * 0.12
+  const dotColor = structure > 0.7 ? colors.accent.signal : colors.text.secondary
+  const dotRadius = structure > 0.7 ? 2 : 1.5
+  const dotOpacity = 0.15 + structure * 0.25
 
   return (
     <div
@@ -45,7 +40,8 @@ export function GridBackground({ structure = 0, className = '' }: GridBackground
       aria-hidden="true"
     >
       <svg width="100%" height="100%" className="absolute inset-0">
-        {/* Base lattice lines - fade in as structure increases */}
+        {/* coarse grid lines at 48px spacing, dense nodes at 24px — nodes sit on
+             and between line intersections for a richer lattice visual */}
         <g style={{ opacity: gridOpacity }}>
           {Array.from({ length: 25 }).map((_, i) => (
             <line
@@ -71,22 +67,16 @@ export function GridBackground({ structure = 0, className = '' }: GridBackground
           ))}
         </g>
 
-        {/* Nodes - interpolate from jittered (raw) to snapped (structured) position */}
-        {nodes.map((node) => (
-          <motion.circle
-            key={node.id}
-            cx={node.x + node.jitterX * (1 - structure)}
-            cy={node.y + node.jitterY * (1 - structure)}
-            r={structure > 0.7 ? 2 : 1.5}
-            fill={structure > 0.7 ? colors.accent.signal : colors.text.secondary}
-            initial={false}
-            animate={{
-              cx: node.x + node.jitterX * (1 - structure),
-              cy: node.y + node.jitterY * (1 - structure),
-              opacity: 0.15 + structure * 0.25,
+        {nodes.map((n, i) => (
+          <g
+            key={i}
+            style={{
+              transform: `translate(${n.jx * (1 - structure)}px, ${n.jy * (1 - structure)}px)`,
+              transition: `transform 0.4s ${STRUCTURE_EASING}`,
             }}
-            transition={{ type: 'spring', stiffness: 60, damping: 20 }}
-          />
+          >
+            <circle cx={n.sx} cy={n.sy} r={dotRadius} fill={dotColor} opacity={dotOpacity} />
+          </g>
         ))}
       </svg>
     </div>

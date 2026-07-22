@@ -1,31 +1,48 @@
-# Xai — Intelligence Workspace
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/your-org/your-repo/main/public/banner-dark.svg">
+  <img alt="Xai — Intelligence Workspace" src="https://raw.githubusercontent.com/your-org/your-repo/main/public/banner-light.svg">
+</picture>
 
-A single-page interactive product experience visualizing how Xai turns raw
-data into structured intelligence and actionable insight.
+<p align="center">
+  <strong>From raw data → structured intelligence → actionable insight → automation.</strong>
+</p>
 
-## Project Overview
+<p align="center">
+  <br>
+  <a href="#-sections">Sections</a> •
+  <a href="docs/ARCHITECTURE.md">Architecture</a> •
+  <a href="docs/ANIMATION.md">Animation</a> •
+  <a href="docs/DESIGN-SYSTEM.md">Design</a> •
+  <a href="docs/COMPONENTS.md">Components</a> •
+  <a href="docs/GETTING-STARTED.md">Setup</a>
+</p>
 
-The core narrative — *raw data → structured intelligence → actionable
-insight → automation* — is expressed through one continuous visual device:
-a coordinate lattice that starts scattered (Hero) and progressively snaps
-into structure across the page, culminating in a 3D extrusion in the
-Signature Interaction. Rather than four disconnected animations, every
-section reads the same `structure` / scroll-progress value, so the
-transformation feels like one system.
+---
 
-## Tech Stack
+A single-page interactive product experience that visualises how **Xai**
+turns raw data into structured intelligence. Built with Next.js 15,
+Three.js, GSAP, and Framer Motion. Designed for decision-makers who think
+in systems, not slides.
 
-- **Next.js 15** (App Router)
-- **Tailwind CSS** — design tokens (color, type, spacing) generated directly
-  from the accompanying Figma file, so code and design stay in sync
-- **Framer Motion** — component-level choreography (entrances, hover states,
-  tab transitions)
-- **GSAP** — reserved for advanced scroll timelines as the interaction
-  design is extended (see `lib/animation`)
-- **Three.js / React Three Fiber** — the Hero particle field and the
-  Signature Interaction's extruding lattice
+The entire page is built around one continuous visual device: a coordinate
+lattice that starts scattered and progressively snaps into structure as you
+scroll. Every section reads the same scroll progress, so the transformation
+feels like one system under tension — not four disconnected demos.
 
-## Getting Started
+---
+
+## Sections
+
+| # | Section | Core technology | What happens |
+|---|---------|----------------|--------------|
+| 1 | **Hero** · Data → Intelligence | Three.js / R3F | 800 particles morph from chaotic scatter to flat grid as you scroll. Connector lines appear between neighbours at >50% structure. |
+| 2 | **Insight Flow** · Ingestion → Decision | GSAP + SVG | Pinned for 300% scroll. An SVG visualisation of 48 particles smoothly interpolates through three states: scattered → clustered → gridded. |
+| 3 | **Dashboard Preview** · Structure, made usable | Framer Motion | Mock product dashboard — sidebar, SVG bar chart, animated data table, tabbed panels with `AnimatePresence` transitions. |
+| 4 | **Signature Interaction** · Every cluster, reorganised | Three.js / R3F | A 14×14 grid of glowing boxes extrudes upward in a wave. Mouse influence pushes nearby nodes. Pulsing core sphere. |
+
+---
+
+## Quick Start
 
 ```bash
 npm install
@@ -34,33 +51,132 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Animation & Interaction Decisions
+[Full setup guide →](docs/GETTING-STARTED.md)
 
-- **Grid as narrative device, not decoration**: `components/ui/GridBackground.tsx`
-  takes a single `structure` prop (0–1) that every section derives from
-  scroll position. This is the one idea the whole page is built around —
-  nodes drift loosely in the Hero and snap into an exact lattice by the
-  Dashboard section.
-- **Clean animation boundary**: GSAP/scroll-driven logic owns page-level
-  narrative (the transformation itself); Framer Motion owns component-level
-  interactions (hover, tab switches, card entrances). See
-  `lib/animation/useScrollProgress.ts` and `lib/animation/easings.ts` for
-  the shared primitives every section pulls from — this is what keeps four
-  sections feeling like one product instead of four demos.
-- **Signature Interaction**: an extruding 3D lattice (React Three Fiber)
-  paired with a live mono-font coordinate readout (`NODES / CLUSTERS`) —
-  ties the 3D moment back to the data narrative rather than being a
-  generic "3D thing that reacts to scroll."
-- **Accessibility**: `prefers-reduced-motion` is respected globally
-  (`app/globals.css`); all interactive elements retain visible focus states
-  via default Tailwind/browser behavior.
+---
 
-*A short video walkthrough of these decisions: [link to be added].*
+## Tech Stack
 
-## Live Deployment
+```
+Framework     Next.js 15 (App Router)
+Animation     Framer Motion + GSAP + ScrollTrigger
+3D            Three.js + React Three Fiber + Drei
+Styling       Tailwind CSS (custom design tokens)
+Fonts         Geist (UI) + JetBrains Mono (code, labels)
+Icons         Lucide React
+```
 
-*[Vercel/Netlify link to be added]*
+---
 
-## Figma
+## Animation Philosophy
 
-[View the Figma design file](https://www.figma.com/design/sGOxAnit9MlqTPLAmPy8Ug/Xai-Intelligence-Workspace) — includes 6 pages: Design System (colors, typography, spacing), Hero Section, Insight Flow, Dashboard Preview, Signature Interaction, and Components.
+Three tools, one shared rhythm. GSAP owns page-level narrative (the
+scroll-driven transformation). Framer Motion owns component-level
+interaction (hover, tabs, entrances). Three.js owns geometry (particles,
+lattice). All three draw from the same easing curves in
+`lib/animation/easings.ts`.
+
+```
+confident  ───────────────────────────►  gradual settle — section entrances
+precise    ────────►                    quick, snappy — hover, tabs
+snap       ────────────────╾───►        overshoot — grid nodes snapping in
+```
+
+Three named curves, every tool reads from the same source.
+
+[Full animation guide →](docs/ANIMATION.md)
+
+---
+
+## Architecture in One Diagram
+
+```
+Scroll Position
+       │
+       ▼
+useScrollProgress ────► Hero particle morph
+       │                  │
+       ▼                  ▼
+useInsightProgress    DataMorph SVG (48 particles × 3 states)
+       │
+       ▼
+   activeStage ─────────► StageCard reveals
+       │
+       ▼
+DashboardPreview ──────► Framer Motion entrances + AnimatePresence tabs
+       │
+       ▼
+SignatureInteraction ──► R3F extruding lattice + mouse influence
+```
+
+[Full architecture guide →](docs/ARCHITECTURE.md)
+
+---
+
+## Design System
+
+```
+bg-base    #0D1117  ████  Page
+bg-surface #161B22  ████  Cards
+accent     #FFB454  ████  Amber — interactive states
+accent     #3FB950  ████  Green — completion states
+
+text-h1    64px     Hero headline
+text-h2    40px     Section titles
+text-h3    24px     Card headings
+text-body  16px     Body copy
+text-label 11px     Uppercase labels (0.08em tracking)
+```
+
+All tokens exist in both `tailwind.config.ts` (for Tailwind classes) and
+`lib/constants.ts` (for Three.js WebGL contexts).
+
+[Full design system →](docs/DESIGN-SYSTEM.md)
+
+---
+
+## Project Structure
+
+```
+app/                  Route files only (page, layout, error, loading, not-found)
+components/
+  sections/
+    hero/             R3F particle field
+    insight-flow/     GSAP pin + DataMorph SVG
+    dashboard-preview/ Framer Motion dashboard
+    signature-interaction/ R3F extruding lattice
+  ui/                 Shared: navbar, footer, grid-background, button
+lib/
+  animation/          easings.ts, useScrollProgress
+  constants.ts        Palette, spacing, GRID_UNIT
+  useReducedMotion.ts Accessibility hook
+```
+
+[Full component reference →](docs/COMPONENTS.md)
+
+---
+
+## Accessibility
+
+- `prefers-reduced-motion` respected globally (CSS) and per-scene (JS)
+- Visible focus states on all interactive elements
+- `aria-hidden="true"` on decorative SVG lattice
+- Colour contrast passes WCAG AA (minimum 4.5:1)
+
+---
+
+## Deliverables
+
+| Deliverable | Status |
+|-------------|--------|
+| Product documentation | ✅ `docs/` directory — 5 guides |
+| Figma design file | 🔲 *(to be added)* |
+| GitHub repository | ✅ This repository |
+| Live deployment | 🔲 *(to be added)* |
+| Video walkthrough | 🔲 *(to be added)* |
+
+---
+
+<p align="center">
+  <sub>Built with curiosity, restraint, and a conviction that data wants to become structure.</sub>
+</p>

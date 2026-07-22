@@ -4,8 +4,9 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { GridBackground } from '@/components/ui/grid-background'
+import { DataMorph } from './data-morph'
 import { StageContent } from './stage-content'
-import { ActiveStage, useActiveStage } from './useActiveStage'
+import { ActiveStage, useInsightProgress } from './useInsightProgress'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -30,10 +31,12 @@ const stages: { index: string; key: ActiveStage; title: string; description: str
   },
 ]
 
+const stageIdx: Record<ActiveStage, number> = { ingest: 0, analyze: 1, generate: 2 }
+
 export function InsightFlow() {
   const sectionRef = useRef<HTMLElement>(null)
   const pinRef = useRef<HTMLDivElement>(null)
-  const activeStage = useActiveStage(sectionRef)
+  const { progress, activeStage } = useInsightProgress(sectionRef)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -46,38 +49,37 @@ export function InsightFlow() {
         scrub: 1.2,
       })
     }, sectionRef)
-
     return () => ctx.revert()
   }, [])
 
   return (
-    <section
-      id="insight-flow"
-      ref={sectionRef}
-      className="relative bg-bg-base overflow-hidden"
-    >
-      <div ref={pinRef} className="h-screen">
-        <GridBackground structure={0.5 + (stages.findIndex((s) => s.key === activeStage) / stages.length) * 0.4} />
+    <section id="insight-flow" ref={sectionRef} className="relative bg-bg-base overflow-hidden">
+      <div ref={pinRef} className="h-screen flex flex-col">
+        <GridBackground
+          structure={0.5 + (stageIdx[activeStage] / stages.length) * 0.4}
+        />
 
-        <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-24 md:px-64">
+        <div className="relative z-10 flex-1 flex flex-col justify-center px-24 md:px-64 mx-auto w-full max-w-6xl">
           <p className="font-mono text-label uppercase text-text-secondary">Insight Flow</p>
           <h2 className="mt-16 font-display text-h2 text-text-primary">
             From ingestion to decision.
           </h2>
 
-          <div className="mt-64 flex flex-col md:flex-row items-start justify-between gap-48 md:gap-0">
-            {stages.map((stage, i) => (
+          {/* Unified visualization */}
+          <div className="mt-32 w-full h-[240px] md:h-[320px]">
+            <DataMorph progress={progress} />
+          </div>
+
+          {/* Stage cards */}
+          <div className="mt-24 flex flex-col md:flex-row items-start justify-between gap-24 md:gap-32">
+            {stages.map((stage) => (
               <StageContent
                 key={stage.key}
-                stage={stage.key}
                 index={stage.index}
                 title={stage.title}
                 description={stage.description}
                 isActive={activeStage === stage.key}
-                isPast={
-                  stages.findIndex((s) => s.key === activeStage) > i
-                }
-                stageIndex={i}
+                isPast={stageIdx[activeStage] > stageIdx[stage.key]}
               />
             ))}
           </div>

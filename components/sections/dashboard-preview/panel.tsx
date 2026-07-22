@@ -5,17 +5,16 @@ import { easings, durations } from '@/lib/animation/easings'
 import { BarChart } from './bar-chart'
 import { DataTable } from './data-table'
 import { AnimatedStat } from './animated-stat'
-
-type PanelType = 'stat' | 'chart' | 'table' | 'stats-group'
+import type { PanelType, StatData, TabData } from './types'
 
 interface PanelProps {
   type: PanelType
   title: string
   delay?: number
-  data?: { label: string; value: number; suffix?: string }[]
+  data?: StatData[]
 }
 
-function PanelContent({ type, data }: { type: PanelType; data?: { label: string; value: number; suffix?: string }[] }) {
+function PanelContent({ type, data }: { type: PanelType; data?: StatData[] }) {
   switch (type) {
     case 'stat':
       return (
@@ -60,7 +59,7 @@ export function TabbedPanel({
   activeTab,
   onTabChange,
 }: {
-  tabs: { id: string; label: string; type: PanelType; data?: { label: string; value: number; suffix?: string }[] }[]
+  tabs: TabData[]
   activeTab: string
   onTabChange: (id: string) => void
 }) {
