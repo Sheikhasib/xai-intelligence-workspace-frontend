@@ -1,0 +1,146 @@
+'use client'
+
+import { useMemo, useRef, useEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
+import { colors } from '@/lib/constants'
+import { useReducedMotion } from '@/lib/useReducedMotion'
+
+const GRID_SIZE = 14
+
+export function ExtrudingLattice({ progress }: { progress: number }) {
+  const reduced = useReducedMotion()
+  const meshRefs = useRef<(THREE.Mesh | null)[]>([])
+  const linesRef = useRef<THREE.LineSegments>(null)
+  const groupRef = useRef<THREE.Group>(null)
+  const mouseRef = useRef(new THREE.Vector2())
+
+  useEffect(() => {
+    const onPointerMove = (e: PointerEvent) => {
+      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1
+      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1
+    }
+    window.addEventListener('pointermove', onPointerMove)
+    return () => window.removeEventListener('pointermove', onPointerMove)
+  }, [])
+
+  const positions = useMemo(() => {
+    const arr: [number, number][] = []
+    for (let x = -GRID_SIZE / 2; x < GRID_SIZE / 2; x++) {
+      for (let y = -GRID_SIZE / 2; y < GRID_SIZE / 2; y++) {
+        arr.push([x, y])
+      }
+    }
+    return arr
+  }, [])
+
+  const linePairs = useMemo(() => {
+    const pairs: number[] = []
+    for (let i = 0; i < positions.length; i++) {
+      const isLastCol = (i % GRID_SIZE) === GRID_SIZE - 1
+      const isLastRow = i >= positions.length - GRID_SIZE
+      if (!isLastCol) pairs.push(i, i + 1)
+      if (!isLastRow) pairs.push(i, i + GRID_SIZE)
+    }
+    return pairs
+  }, [positions])
+
+  const lineObject = useMemo(() => {
+    const arr = new Float32Array(linePairs.length * 3)
+    for (let i = 0; i < linePairs.length; i++) {
+      const p = positions[linePairs[i]]
+      arr[i * 3] = p[0] * 0.6
+      arr[i * 3 + 1] = p[1] * 0.6
+      arr[i * 3 + 2] = 0
+    }
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute('position', new THREE.BufferAttribute(arr, 3))
+    geo.computeBoundingSphere()
+    const mat = new THREE.LineBasicMaterial({ color: colors.accent.signal, transparent: true, opacity: 0.15 })
+    const obj = new THREE.LineSegments(geo, mat)
+    obj.visible = false
+    return obj
+  }, [linePairs, positions])
+
+  useFrame((state) => {
+    if (reduced) return
+
+    const t = state.clock.elapsedTime
+    const mouse = mouseRef.current
+    const extrusions = new Float32Array(positions.length)
+
+    for (let i = 0; i < positions.length; i++) {
+      const mesh = meshRefs.current[i]
+      if (!mesh) continue
+      const [x, y] = positions[i]
+      const dist = Math.sqrt(x * x + y * y)
+      const wave = Math.sin(t * 0.8 - dist * 0.4) * 0.5 + 0.5
+
+      const mx = x / (GRID_SIZE / 2)
+      const my = y / (GRID_SIZE / 2)
+      const push = Math.exp(-((mx - mouse.x) ** 2 + (my - mouse.y) ** 2) * 2) * 0.6 * progress
+
+      const extrusion = wave * progress * (1 - dist / GRID_SIZE) * 2.5 + push
+      extrusions[i] = extrusion
+
+      mesh.position.z = extrusion
+      mesh.scale.setScalar(0.15 + extrusion * 0.12)
+
+      const mat = mesh.material as THREE.MeshStandardMaterial
+      const mix = Math.min(1, extrusion / 2)
+      mat.color.setHSL(0.1 - mix * 0.1, 0.8, 0.5 + mix * 0.2)
+      mat.emissive.setHSL(0.1 - mix * 0.1, 0.8, 0.15 + mix * 0.15)
+    }
+
+    const lineObj = linesRef.current
+    if (lineObj && progress > 0.1) {
+      const pos = lineObj.geometry.attributes.position as THREE.BufferAttribute
+      const array = pos.array as Float32Array
+      let idx = 0
+      for (let i = 0; i < linePairs.length; i += 2) {
+        const a = linePairs[i]
+        const b = linePairs[i + 1]
+        if (b === undefined) break
+        const pa = positions[a]
+        const pb = positions[b]
+        array[idx * 3] = pa[0] * 0.6
+        array[idx * 3 + 1] = pa[1] * 0.6
+        array[idx * 3 + 2] = extrusions[a]
+        idx++
+        array[idx * 3] = pb[0] * 0.6
+        array[idx * 3 + 1] = pb[1] * 0.6
+        array[idx * 3 + 2] = extrusions[b]
+        idx++
+      }
+      pos.needsUpdate = true
+      lineObj.visible = true
+    }
+
+    if (groupRef.current) {
+      groupRef.current.rotation.x = -0.3 + progress * 0.1
+      groupRef.current.rotation.y = 0.3 + t * 0.05 * progress + mouse.x * 0.1
+    }
+  })
+
+  return (
+    <group ref={groupRef} rotation={[-0.3, 0.3, 0]}>
+      {positions.map(([x, y], i) => (
+        <mesh
+          key={`${x}-${y}`}
+          position={[x * 0.6, y * 0.6, 0]}
+          ref={(el) => { meshRefs.current[i] = el }}
+        >
+          <boxGeometry args={[0.3, 0.3, 0.3]} />
+          <meshStandardMaterial
+            color={colors.accent.signal}
+            emissive={colors.accent.signal}
+            emissiveIntensity={0.2}
+          />
+        </mesh>
+      ))}
+      <primitive ref={linesRef} object={lineObject} />
+      <ambientLight intensity={0.5} />
+      <pointLight position={[5, 5, 5]} intensity={1.5} color={colors.accent.signal} />
+    </group>
+  )
+}
