@@ -6,4 +6,6 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .opencode
-figma-plugin
+figma-plugin/
+Frontend Task.docx.pdf
+Xai-Product-Documentation.docx
