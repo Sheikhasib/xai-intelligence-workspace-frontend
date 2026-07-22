@@ -63,4 +63,4 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Figma
 
-*[Public Figma file link to be added]*
+[View the Figma design file](https://www.figma.com/design/sGOxAnit9MlqTPLAmPy8Ug/Xai-Intelligence-Workspace) — includes 6 pages: Design System (colors, typography, spacing), Hero Section, Insight Flow, Dashboard Preview, Signature Interaction, and Components.
