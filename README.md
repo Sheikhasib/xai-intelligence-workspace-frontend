@@ -30,12 +30,12 @@ feels like one system under tension — not four disconnected demos.
 
 ## Sections
 
-| # | Section | Core technology | What happens |
-|---|---------|----------------|--------------|
-| 1 | **Hero** · Data → Intelligence | Three.js / R3F | 800 particles morph from chaotic scatter to flat grid as you scroll. Connector lines appear between neighbours at >50% structure. |
-| 2 | **Insight Flow** · Ingestion → Decision | GSAP + SVG | Pinned for 300% scroll. An SVG visualisation of 48 particles smoothly interpolates through three states: scattered → clustered → gridded. |
-| 3 | **Dashboard Preview** · Structure, made usable | Framer Motion | Mock product dashboard — sidebar, SVG bar chart, animated data table, tabbed panels with `AnimatePresence` transitions. |
-| 4 | **Signature Interaction** · Every cluster, reorganised | Three.js / R3F | A 14×14 grid of glowing boxes extrudes upward in a wave. Mouse influence pushes nearby nodes. Pulsing core sphere. |
+| #   | Section                                                | Core technology | What happens                                                                                                                              |
+| --- | ------------------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Hero** · Data → Intelligence                         | Three.js / R3F  | 800 particles morph from chaotic scatter to flat grid as you scroll. Connector lines appear between neighbours at >50% structure.         |
+| 2   | **Insight Flow** · Ingestion → Decision                | GSAP + SVG      | Pinned for 300% scroll. An SVG visualisation of 48 particles smoothly interpolates through three states: scattered → clustered → gridded. |
+| 3   | **Dashboard Preview** · Structure, made usable         | Framer Motion   | Mock product dashboard — sidebar, SVG bar chart, animated data table, tabbed panels with `AnimatePresence` transitions.                   |
+| 4   | **Signature Interaction** · Every cluster, reorganised | Three.js / R3F  | A 14×14 grid of glowing boxes extrudes upward in a wave. Mouse influence pushes nearby nodes. Pulsing core sphere.                        |
 
 ---
 
@@ -111,21 +111,19 @@ SignatureInteraction ──► R3F extruding lattice + mouse influence
 
 ## Design System
 
-```
-bg-base    #0D1117  ████  Page
-bg-surface #161B22  ████  Cards
-accent     #FFB454  ████  Amber — interactive states
-accent     #3FB950  ████  Green — completion states
+The page lives in deep shadow (`#0D1117`). Every surface lifts one shade
+brighter (`#161B22`), hover targets another (`#1C2129`). Two accent colours
+drive interaction: **amber** (`#FFB454`) for everything clickable, active,
+and highlighted; **green** (`#3FB950`) for completion states.
 
-text-h1    64px     Hero headline
-text-h2    40px     Section titles
-text-h3    24px     Card headings
-text-body  16px     Body copy
-text-label 11px     Uppercase labels (0.08em tracking)
-```
+Type uses **Geist** by default and **JetBrains Mono** for data — labels,
+stats, the navbar brand. Seven sizes, each with a clear job: the hero
+headline commands at 64 px, section titles lead at 40 px, cards work at
+24 px, and body copy settles at 16 px. Labels sit at 11 px with tight
+letter-spacing, reading like instrument-panel markings.
 
-All tokens exist in both `tailwind.config.ts` (for Tailwind classes) and
-`lib/constants.ts` (for Three.js WebGL contexts).
+All tokens are defined in `tailwind.config.ts` for Tailwind and duplicated
+in `lib/constants.ts` for Three.js (which cannot read Tailwind classes).
 
 [Full design system →](docs/DESIGN-SYSTEM.md)
 
