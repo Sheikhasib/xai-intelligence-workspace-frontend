@@ -2,7 +2,18 @@
 
 import { useMemo, useRef, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import {
+  BufferGeometry,
+  BufferAttribute,
+  LineBasicMaterial,
+  LineSegments,
+  Vector2,
+  DoubleSide,
+  type Mesh,
+  type Group,
+  type MeshStandardMaterial,
+  type MeshBasicMaterial,
+} from 'three'
 import { colors } from '@/lib/constants'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
@@ -10,13 +21,13 @@ const GRID_SIZE = 14
 
 export function ExtrudingLattice({ progress }: { progress: number }) {
   const reduced = useReducedMotion()
-  const meshRefs = useRef<(THREE.Mesh | null)[]>([])
-  const glowRefs = useRef<(THREE.Mesh | null)[]>([])
-  const linesRef = useRef<THREE.LineSegments>(null)
-  const groupRef = useRef<THREE.Group>(null)
-  const coreRef = useRef<THREE.Mesh>(null)
-  const coreGlowRef = useRef<THREE.Mesh>(null)
-  const mouseRef = useRef(new THREE.Vector2())
+  const meshRefs = useRef<(Mesh | null)[]>([])
+  const glowRefs = useRef<(Mesh | null)[]>([])
+  const linesRef = useRef<LineSegments>(null)
+  const groupRef = useRef<Group>(null)
+  const coreRef = useRef<Mesh>(null)
+  const coreGlowRef = useRef<Mesh>(null)
+  const mouseRef = useRef(new Vector2())
 
   useEffect(() => {
     const onPointerMove = (e: PointerEvent) => {
@@ -62,15 +73,15 @@ export function ExtrudingLattice({ progress }: { progress: number }) {
       arr[i * 3 + 1] = p[1] * 0.6
       arr[i * 3 + 2] = 0
     }
-    const geo = new THREE.BufferGeometry()
-    geo.setAttribute('position', new THREE.BufferAttribute(arr, 3))
+    const geo = new BufferGeometry()
+    geo.setAttribute('position', new BufferAttribute(arr, 3))
     geo.computeBoundingSphere()
-    const mat = new THREE.LineBasicMaterial({
+    const mat = new LineBasicMaterial({
       color: colors.accent.signal,
       transparent: true,
       opacity: 0.12,
     })
-    const obj = new THREE.LineSegments(geo, mat)
+    const obj = new LineSegments(geo, mat)
     obj.visible = false
     return obj
   }, [linePairs, positions])
@@ -102,7 +113,7 @@ export function ExtrudingLattice({ progress }: { progress: number }) {
       const scale = 0.15 + extrusion * 0.12
       mesh.scale.setScalar(scale)
 
-      const mat = mesh.material as THREE.MeshStandardMaterial
+      const mat = mesh.material as MeshStandardMaterial
       const mix = Math.min(1, extrusion / 2)
       mat.color.setHSL(0.1 - mix * 0.1, 0.8, 0.5 + mix * 0.2)
       mat.emissive.setHSL(0.1 - mix * 0.1, 0.8, 0.15 + mix * 0.15)
@@ -114,7 +125,7 @@ export function ExtrudingLattice({ progress }: { progress: number }) {
         const glowScale = extrusion > 0.8 ? extrusion * 0.5 : 0
         glow.scale.setScalar(glowScale > 0.01 ? glowScale : 0.001)
         glow.position.z = extrusion
-        const glowMat = glow.material as THREE.MeshBasicMaterial
+        const glowMat = glow.material as MeshBasicMaterial
         glowMat.opacity = Math.min(0.2, extrusion * 0.1)
       }
     }
@@ -125,19 +136,19 @@ export function ExtrudingLattice({ progress }: { progress: number }) {
       coreRef.current.scale.setScalar(corePulse)
       coreRef.current.position.z = maxExtrusion * 0.5
 
-      const coreMat = coreRef.current.material as THREE.MeshStandardMaterial
+      const coreMat = coreRef.current.material as MeshStandardMaterial
       coreMat.emissiveIntensity = 0.3 + Math.sin(t * 1.2) * 0.2
 
       coreGlowRef.current.scale.setScalar(corePulse * 3)
       coreGlowRef.current.position.z = maxExtrusion * 0.5
-      const glowMat = coreGlowRef.current.material as THREE.MeshBasicMaterial
+      const glowMat = coreGlowRef.current.material as MeshBasicMaterial
       glowMat.opacity = 0.08 + Math.sin(t * 1.2) * 0.04
     }
 
     // Lines
     const lineObj = linesRef.current
     if (lineObj && progress > 0.1) {
-      const pos = lineObj.geometry.attributes.position as THREE.BufferAttribute
+      const pos = lineObj.geometry.attributes.position as BufferAttribute
       const array = pos.array as Float32Array
       let idx = 0
       for (let i = 0; i < linePairs.length; i += 2) {
@@ -159,7 +170,7 @@ export function ExtrudingLattice({ progress }: { progress: number }) {
       lineObj.visible = true
 
       // Line opacity increases with progress
-      const lineMat = lineObj.material as THREE.LineBasicMaterial
+      const lineMat = lineObj.material as LineBasicMaterial
       lineMat.opacity = 0.06 + progress * 0.14
     }
 
@@ -211,7 +222,7 @@ export function ExtrudingLattice({ progress }: { progress: number }) {
               color={colors.accent.signal}
               transparent
               opacity={0}
-              side={THREE.DoubleSide}
+              side={DoubleSide}
             />
           </mesh>
         </group>

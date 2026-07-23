@@ -3,20 +3,13 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { colors } from '@/lib/constants'
+import { lerp, clamp, smoothstep } from '@/lib/utils'
 
 const PARTICLE_COUNT = 48
 const S_W = 600
 const S_H = 360
 const CX = S_W / 2
 const CY = S_H / 2
-
-function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
-function clamp(v: number) { return Math.min(1, Math.max(0, v)) }
-
-function smoothstep(edge0: number, edge1: number, x: number) {
-  const t = clamp((x - edge0) / (edge1 - edge0))
-  return t * t * (3 - 2 * t)
-}
 
 interface ParticleDef {
   id: number

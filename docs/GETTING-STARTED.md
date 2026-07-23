@@ -36,7 +36,6 @@ This installs:
 | `gsap` | ^3.12.5 | Scroll-driven animations |
 | `three` / `@react-three/fiber` / `@react-three/drei` | ^0.170.0 / ^9.1.0 / ^10.0.0 | 3D rendering |
 | `geist` | ^1.3.1 | Typeface (self-hosted) |
-| `lucide-react` | ^1.25.0 | Icon library |
 | `tailwindcss` | ^3.4.14 | Utility CSS |
 | `typescript` | ^5.6.3 | Type checking |
 
@@ -112,8 +111,9 @@ zero-config deployment.
 
 1. Push the repository to GitHub/GitLab
 2. In Netlify, import the project
-3. Set build command to `npm run build`
-4. Set publish directory to `.next`
+3. Enable the **Next.js on Netlify** plugin (auto-detected)
+4. Set build command to `npm run build`
+5. Leave publish directory empty (the plugin handles it)
 
 ---
 

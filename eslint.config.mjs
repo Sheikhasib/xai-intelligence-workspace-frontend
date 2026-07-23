@@ -1,19 +1,25 @@
-import { defineConfig, globalIgnores } from "eslint/config";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-const eslintConfig = defineConfig([
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals"),
   {
     rules: {
       "no-unused-vars": "warn",
       "no-console": "off",
     },
   },
-  globalIgnores([
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-    "_fig_test/**",
-  ]),
-]);
+  {
+    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts", "_fig_test/**"],
+  },
+];
 
 export default eslintConfig;

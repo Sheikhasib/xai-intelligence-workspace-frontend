@@ -33,7 +33,6 @@ components/
     +-- footer.tsx              Minimal footer
     +-- grid-background.tsx     SVG lattice with structure prop
     +-- button.tsx              Primary + ghost button variants
-    +-- nav-item.tsx            Navigation link item
 ```
 
 ---
@@ -157,18 +156,6 @@ controls:
 |---------|---------|-------|
 | `primary` | Amber border, amber text | Amber fill, dark text |
 | `ghost` | Secondary text | Primary text |
-
-### NavItem
-
-```tsx
-<NavItem label="Overview" active={true} onClick={...} />
-```
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | - | Display text |
-| `active` | `boolean` | `false` | Active state |
-| `onClick` | `() => void` | - | Click handler |
 
 ### Footer
 

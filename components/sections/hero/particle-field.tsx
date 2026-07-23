@@ -2,7 +2,14 @@
 
 import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import {
+  BufferGeometry,
+  BufferAttribute,
+  LineBasicMaterial,
+  LineSegments,
+  MathUtils,
+  type Points,
+} from 'three'
 import { colors, GRID_UNIT } from '@/lib/constants'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
@@ -10,8 +17,8 @@ const PARTICLE_COUNT = 800
 
 function Particles({ progress }: { progress: number }) {
   const reduced = useReducedMotion()
-  const pointsRef = useRef<THREE.Points>(null)
-  const linesRef = useRef<THREE.LineSegments>(null)
+  const pointsRef = useRef<Points>(null)
+  const linesRef = useRef<LineSegments>(null)
 
   const { rawPositions, gridPositions } = useMemo(() => {
     const raw = new Float32Array(PARTICLE_COUNT * 3)
@@ -51,15 +58,15 @@ function Particles({ progress }: { progress: number }) {
 
   const lineObject = useMemo(() => {
     const arr = new Float32Array(linePairs.length * 3)
-    const geo = new THREE.BufferGeometry()
-    geo.setAttribute('position', new THREE.BufferAttribute(arr, 3))
+    const geo = new BufferGeometry()
+    geo.setAttribute('position', new BufferAttribute(arr, 3))
     geo.computeBoundingSphere()
-    const mat = new THREE.LineBasicMaterial({
+    const mat = new LineBasicMaterial({
       color: colors.accent.signal,
       transparent: true,
       opacity: 0.15,
     })
-    const obj = new THREE.LineSegments(geo, mat)
+    const obj = new LineSegments(geo, mat)
     obj.visible = false
     return obj
   }, [linePairs])
@@ -67,7 +74,7 @@ function Particles({ progress }: { progress: number }) {
   useFrame((state) => {
     if (!pointsRef.current) return
     const t = state.clock.elapsedTime
-    const posAttr = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute
+    const posAttr = pointsRef.current.geometry.attributes.position as BufferAttribute
 
     if (reduced) {
     for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -86,10 +93,10 @@ function Particles({ progress }: { progress: number }) {
       const driftY = Math.cos(t * 0.2 + i) * 0.15 * (1 - progress)
 
       currentPositions[idx] =
-        THREE.MathUtils.lerp(rawPositions[idx], gridPositions[idx], progress) + driftX
+        MathUtils.lerp(rawPositions[idx], gridPositions[idx], progress) + driftX
       currentPositions[idx + 1] =
-        THREE.MathUtils.lerp(rawPositions[idx + 1], gridPositions[idx + 1], progress) + driftY
-      currentPositions[idx + 2] = THREE.MathUtils.lerp(
+        MathUtils.lerp(rawPositions[idx + 1], gridPositions[idx + 1], progress) + driftY
+      currentPositions[idx + 2] = MathUtils.lerp(
         rawPositions[idx + 2],
         gridPositions[idx + 2],
         progress
@@ -101,7 +108,7 @@ function Particles({ progress }: { progress: number }) {
 
     const lineObj = linesRef.current
     if (lineObj && progress > 0.5) {
-      const lineAttr = lineObj.geometry.attributes.position as THREE.BufferAttribute
+      const lineAttr = lineObj.geometry.attributes.position as BufferAttribute
       const arr = lineAttr.array as Float32Array
       for (let i = 0; i < linePairs.length; i++) {
         const pi = linePairs[i]

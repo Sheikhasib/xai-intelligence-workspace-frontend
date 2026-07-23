@@ -60,7 +60,6 @@ Animation     Framer Motion + GSAP + ScrollTrigger
 3D            Three.js + React Three Fiber + Drei
 Styling       Tailwind CSS (custom design tokens)
 Fonts         Inter (UI) + JetBrains Mono (code, labels)
-Icons         Lucide React
 ```
 
 ---
