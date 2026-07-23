@@ -21,6 +21,7 @@ No typecheck, test, or formatter scripts exist. Run `npx tsc --noEmit` manually 
 ## Design system
 
 Custom Tailwind color/typography tokens in `tailwind.config.ts`:
+
 - Background: `bg-base` (#0D1117), `bg-surface`, `bg-hover`
 - Text: `text-primary`, `text-secondary`
 - Accent: `accent-signal` (amber), `accent-success` (green)
@@ -32,15 +33,15 @@ Raw color/spacing values re-exported in `lib/constants.ts` for Three.js/canvas c
 
 ## Key files
 
-| Path | Purpose |
-|---|---|
-| `lib/animation/useScrollProgress.ts` | Shared scroll hook (0→1) for all sections |
-| `lib/animation/easings.ts` | Named easings (`confident`, `precise`, `snap`) for both GSAP + Framer |
-| `lib/constants.ts` | Color palette, spacing, `GRID_UNIT` (24px) |
-| `lib/utils.ts` | `cn()` utility (clsx + tailwind-merge) |
-| `components/ui/grid-background.tsx` | SVG lattice with `structure` prop |
-| `components/ui/button.tsx` | Two variants: `primary` (outlined amber) and `ghost` |
-| `app/globals.css` | Tailwind directives, prefers-reduced-motion reset |
+| Path                                 | Purpose                                                               |
+| ------------------------------------ | --------------------------------------------------------------------- |
+| `lib/animation/useScrollProgress.ts` | Shared scroll hook (0→1) for all sections                             |
+| `lib/animation/easings.ts`           | Named easings (`confident`, `precise`, `snap`) for both GSAP + Framer |
+| `lib/constants.ts`                   | Color palette, spacing, `GRID_UNIT` (24px)                            |
+| `lib/utils.ts`                       | `cn()` utility (clsx + tailwind-merge)                                |
+| `components/ui/grid-background.tsx`  | SVG lattice with `structure` prop                                     |
+| `components/ui/button.tsx`           | Two variants: `primary` (outlined amber) and `ghost`                  |
+| `app/globals.css`                    | Tailwind directives, prefers-reduced-motion reset                     |
 
 ## Project conventions
 
@@ -49,9 +50,3 @@ Raw color/spacing values re-exported in `lib/constants.ts` for Three.js/canvas c
 - `reactStrictMode: true` in `next.config.ts`.
 - No tests, no test framework, no CI workflow configured.
 - `.opencode/` directory holds OpenCode agents, skills, commands, and specs.
-
-## OpenCode customizations
-
-- **Commands**: `create-spec` (generates spec + feature branch), `test-spec` (empty).
-- **Specs**: Feature specs go in `.opencode/specs/`. Existing: `01.contact-form-api.md`.
-- **Build before commit**: Run `npm run build` to catch build errors; no other verification step exists.
