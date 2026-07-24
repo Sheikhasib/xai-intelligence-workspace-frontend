@@ -159,6 +159,26 @@ lib/
 
 ---
 
+## Demo
+
+<p align="center">
+  <a href="https://drive.google.com/file/d/1YekorKdPNWRr4GD1KJpM6XMhysAdfQM5/view" target="_blank">
+    <img src="https://img.shields.io/badge/Watch%20Demo-FFB454?style=for-the-badge&logo=google-drive&logoColor=0D1117" alt="Watch Demo">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://drive.google.com/file/d/1YekorKdPNWRr4GD1KJpM6XMhysAdfQM5/preview" target="_blank">
+    <img src="public/screenshots/thumbnail.png" alt="Xai Intelligence Demo" width="720" style="border-radius: 12px; border: 1px solid #30363D;">
+  </a>
+</p>
+
+<p align="center">
+  <sub>Click the image or badge above to watch the full walkthrough on Google Drive.</sub>
+</p>
+
+---
+
 <p align="center">
   <sub>Built with curiosity, restraint, and a conviction that data wants to become structure.</sub>
 </p>
